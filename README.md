@@ -84,7 +84,7 @@ Manage your profile and shared dishes
 ## 🖼️ Screenshots
 
 ### 🏡 Home Page  
-![Home Page](projectScaranshoots/Screenshot 2025-11-08 134321.png)
+![Home Page](projectScaranshoots/homepage.png)
 
 
 
