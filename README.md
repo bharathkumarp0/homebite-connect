@@ -86,15 +86,11 @@ Manage your profile and shared dishes
 ### 🏡 Home Page  
 ![Home Page](projectScaranshoots/homepage.png)
 
-
-
-
 ### 🍲 Dish Sharing Page  
-![Dish Sharing](https://github.com/BharathKumar/homebite-connect/blob/main/projectScaranshoots/Screenshot 2025-11-08 134321.png)
-
+![Dish Sharing Page](projectScaranshoots/share.png)
 
 ### 👤 Profile Page  
-![Profile Page]![Home Page](https://github.com/BharathKumar/homebite-connect/blob/main/projectScaranshoots/Screenshot 2025-11-08 134156.png)
+![profile Page](projectScaranshoots/profile.png)
 
 
 (Replace USERNAME/REPO with your actual GitHub repository path.)
