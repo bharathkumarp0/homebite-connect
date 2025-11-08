@@ -84,7 +84,8 @@ Manage your profile and shared dishes
 ## 🖼️ Screenshots
 
 ### 🏡 Home Page  
-![Home Page](https://github.com/BharathKumar/homebite-connect/projectScaranshoots/Screenshot 2025-11-08 134321.png)
+![Home Page](projectScaranshoots/Screenshot 2025-11-08 134321.png)
+
 
 
 
