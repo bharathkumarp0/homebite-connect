@@ -91,9 +91,6 @@ Manage your profile and shared dishes
 
 ### 👤 Profile Page  
 ![profile Page](projectScaranshoots/profile.png)
-
-
-(Replace USERNAME/REPO with your actual GitHub repository path.)
 📜 License
 
 This project is licensed under the MIT License.
