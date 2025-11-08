@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeBite Connect | Share & Swap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Titan+One&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --blue: #4D96FF;
+      --green: #6BCB77;
+      --orange: #FFB562;
+      --text: #2E3A59;
+      --bg: #F0FFF4;
+      --card-bg: #fff;
+      --radius: 22px;
+      --shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, var(--bg), #ffffff);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      background: rgba(255,255,255,0.9);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      transition: all 0.4s ease;
+    }
+    header.scrolled {
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+      transform: scale(1.01);
+    }
+    .logo {
+      font-family: 'Titan One', cursive;
+      font-size: 28px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: transform 0.3s;
+    }
+    .logo:hover { transform: scale(1.05); }
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      margin: 0 12px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    nav a:hover { color: var(--blue); }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 70px 20px 60px;
+      background: linear-gradient(120deg, var(--blue), var(--green));
+      color: white;
+      border-bottom-left-radius: 60px;
+      border-bottom-right-radius: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero h1 {
+      font-family: 'Titan One';
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+    .hero p { font-size: 18px; }
+    .floating-icon {
+      position: absolute;
+      opacity: 0.15;
+      width: 60px;
+      animation: float 8s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* Container */
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 60px 20px;
+      gap: 40px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    /* Cards */
+    .card {
+      flex: 1 1 450px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 30px 25px;
+      transition: transform 0.4s, box-shadow 0.4s;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+    .card:hover {
+      transform: translateY(-10px) rotateY(3deg);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+    .card h2 {
+      font-family: 'Titan One';
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    .share-card h2 { color: var(--green); }
+    .swap-card h2 { color: var(--orange); }
+    .card p {
+      margin-bottom: 15px;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    /* Form */
+    form label {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+      display: block;
+      margin-bottom: 5px;
+    }
+    form input, form textarea, form select {
+      width: 100%;
+      padding: 10px;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+    form input:focus, form textarea:focus, form select:focus {
+      border-color: var(--blue);
+      outline: none;
+      box-shadow: 0 0 8px #4D96FF44;
+    }
+    .preview {
+      width: 100px; height: 100px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .submit-btn {
+      display: inline-block;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 30px;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .share-btn { background: linear-gradient(90deg, var(--green), var(--blue)); }
+    .swap-btn { background: linear-gradient(90deg, var(--orange), var(--blue)); }
+    .submit-btn:hover { opacity: 0.9; transform: scale(1.05); }
+
+    /* Success Modal */
+    .success-modal {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255,255,255,0.95);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 50;
+      text-align: center;
+    }
+    .success-modal h2 {
+      color: var(--green);
+      font-family: 'Titan One';
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px 10px;
+      color: #666;
+      border-top: 1px solid #eee;
+      font-size: 15px;
+    }
+
+    /* Responsive */
+    @media(max-width: 768px){
+      .container { flex-direction: column; align-items: center; }
+      .hero h1 { font-size: 36px; }
+      .card { width: 100%; max-width: 90%; }
+    }
+  </style>
+</head>
+<body>
+
+
+<header>
+  <div class="logo">HomeBite Connect</div>
+  <nav >
+    <a th:href="@{/Frontpage}">Back to Home</a>
+    <a th:href="@{/sharedetails}">MY Share</a>
+    <a th:href="@{/Orders}">Orders</a>
+    <a th:href="@{/Swap}">MySwap</a>
+    <a th:href="@{/Profile}">Profile</a>
+
+  </nav>
+</header>
+
+<section class="hero">
+  <img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" class="floating-icon" style="top:20%; left:10%">
+  <img src="https://cdn-icons-png.flaticon.com/512/857/857681.png" class="floating-icon" style="bottom:15%; right:12%">
+  <h1>Share & Swap Your Food</h1>
+  <p>Connect with others, reduce waste, and spread smiles through home-cooked meals.</p>
+</section>
+
+<section class="container">
+  <!-- Share Food Card -->
+  <div class="card share-card">
+    <h2>🍛 Share Food</h2>
+    <p>Offer your delicious home-cooked food to others. Upload a picture, describe your dish, and share it instantly.</p>
+    <form id="shareForm" th:action="@{/ShareFood}" method="post" enctype="multipart/form-data">
+
+      <label>Dish Name</label>
+      <input type="text" name="dishName" placeholder="e.g., Paneer Butter Masala" required>
+
+      <label>Category</label>
+      <select name="category" required>
+        <option value="">Select</option>
+        <option value="Veg">Veg</option>
+        <option value="Non-Veg">Non-Veg</option>
+        <option value="Dessert">Dessert</option>
+      </select>
+
+      <label>Description</label>
+      <textarea name="description" placeholder="Describe your dish..." required></textarea>
+
+      <label>Quantity</label>
+      <input type="text" name="location" placeholder="e.g., 2 Plates" required>
+
+      <label>Upload Image</label>
+      <input type="file" name="image" accept="image/*" id="shareImage" required>
+      <div class="preview" id="sharePreview"></div>
+
+
+      <input type="hidden" name="image" id="imageUrl">
+
+      <button class="submit-btn share-btn" type="submit">Share Now</button>
+    </form>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Swap Food Card -->
+  <div class="card swap-card">
+    <h2>🍲 Swap Food</h2>
+    <p>Want to trade your dish for something new? Offer your food and discover what others are swapping nearby.</p>
+    <form id="swapForm" th:action="@{/addSwap}" th:object="${swapDto}" method="post" enctype="multipart/form-data">
+      <label>Dish Name</label>
+      <input type="text" th:field="*{dishName}" required>
+
+      <label>Category</label>
+      <select th:field="*{category}" required>
+        <option value="">Select</option>
+        <option value="Veg">Veg</option>
+        <option value="Non-Veg">Non-Veg</option>
+        <option value="Dessert">Dessert</option>
+      </select>
+
+      <label>Description</label>
+      <textarea th:field="*{description}" required></textarea>
+
+      <label>Quantity</label>
+      <input type="text" th:field="*{quantity}">
+
+      <label>Preferred Swap For</label>
+      <input type="text" th:field="*{preferredSwapFor}">
+
+      <label>Location</label>
+      <input type="text" th:field="*{location}" required>
+
+      <label>Upload Image</label>
+      <input type="file" th:field="*{imageFile}" accept="image/*">
+
+
+      <button class="submit-btn share-btn" type="submit">Swap Now</button>
+    </form>
+
+
+  </div>
+</section>
+
+<!-- Success Modal -->
+<div class="success-modal" id="successModal">
+  <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" width="120">
+  <h2>🎉 Submission Successful!</h2>
+  <p style="color:#333;margin-top:10px;">Your dish has been shared with the community!</p>
+</div>
+
+<footer>
+  © 2025 HomeBite Connect — Bringing People Together Through Food 🍴
+</footer>
+
+<script>
+  // Smooth navbar scroll effect
+  window.addEventListener("scroll", () => {
+    document.querySelector("header").classList.toggle("scrolled", window.scrollY > 30);
+  });
+
+  // Entry Animations
+  gsap.from(".hero h1", { y: -40, opacity: 0, duration: 1 });
+  gsap.from(".hero p", { y: 30, opacity: 0, delay: 0.3, duration: 0.8 });
+  gsap.from(".card", { opacity: 0, y: 60, stagger: 0.3, duration: 1.1, ease: "power3.out", delay: 0.4 });
+
+  // Scroll animation reveal
+  gsap.utils.toArray(".card").forEach((el) => {
+    gsap.from(el, {
+      scrollTrigger: { trigger: el, start: "top 85%" },
+      opacity: 0,
+      y: 40,
+      duration: 1,
+    });
+  });
+
+  // Live preview for images
+  function setupPreview(inputId, previewId) {
+    document.getElementById(inputId).addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      const preview = document.getElementById(previewId);
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          preview.style.display = "block";
+          preview.innerHTML = `<img src="${ev.target.result}" alt="Preview">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+  setupPreview("shareImage", "sharePreview");
+  setupPreview("swapImage", "swapPreview");
+
+  // Mock form submission with modal
+  document.querySelectorAll("form").forEach((form) => {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      gsap.to(form, { opacity: 0.3, scale: 0.97, duration: 0.4 });
+      const modal = document.getElementById("successModal");
+      modal.style.display = "flex";
+      gsap.fromTo(modal, { opacity: 0 }, { opacity: 1, duration: 0.6 });
+      setTimeout(() => {
+        gsap.to(modal, {
+          opacity: 0,
+          duration: 0.6,
+          onComplete: () => (modal.style.display = "none"),
+        });
+        gsap.to(form, { opacity: 1, scale: 1, duration: 0.4 });
+        form.reset();
+        document.querySelectorAll(".preview").forEach(p => p.style.display = "none");
+      }, 2000);
+    });
+  });
+</script>
+</body>
+</html>

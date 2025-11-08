@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HomeBite-Connect</title>
+
+    <link rel="icon" th:href="@{/images/logo (3).png}" type="image/png" />
+    <link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* ---------- Rainbow title (fixed + enhanced) ---------- */
+        .rainbow-title,
+        .rainbow-text {
+          font-size: 4rem;           /* INCREASED: large title */
+          font-weight: 800;
+          text-align: left;
+          display: inline-block;
+          /* full rainbow gradient */
+          background: linear-gradient(90deg,
+            #ff7a18 0%,
+            #ffd347 15%,
+            #67d16a 30%,
+            #00b4ff 50%,
+            #5b49ff 70%,
+            #ff4081 85%,
+            #ff7a18 100%);
+          background-size: 300% 100%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: rainbow-slide 6s linear infinite;
+          text-shadow: 0 4px 18px rgba(0,0,0,0.06);
+          line-height: 1;
+        }
+
+        @keyframes rainbow-slide {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        .rainbow-title.glow { text-shadow: 0 0 12px rgba(255,255,255,0.9); }
+
+        /* ---------- Page variables & reset ---------- */
+        :root {
+          --bg: #F0FFF4;
+          --accent: #43a047;
+          --dark: #18472e;
+          --light: #ffffff;
+          --shadow: rgba(0, 0, 0, 0.08);
+          --nav-bg: rgba(240,255,244,0.95);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+          font-family: "Poppins", sans-serif;
+          background-color: var(--bg);
+          color: var(--dark);
+          overflow-x: hidden;
+          padding-top: 72px; /* keep navbar space */
+          -webkit-font-smoothing:antialiased;
+          -moz-osx-font-smoothing:grayscale;
+        }
+
+        /* ---------- NAVBAR ---------- */
+        header.nav {
+          position: fixed;
+          top: 0; left: 0; right: 0;
+          height: 70px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: linear-gradient(to right, #f2fbf4, #f9fff9);
+          box-shadow: 0 6px 20px var(--shadow);
+          padding: 0 32px;
+          z-index: 1000;
+          border-bottom: 1px solid rgba(34,139,34,0.06);
+        }
+
+        .nav-left { display:flex; align-items:center; gap:12px; }
+        .logo { height:46px; width:auto; display:block; }
+        .brand-title {
+          font-family: "Titan One", cursive;
+          font-size: 26px;
+          color: var(--accent);
+          letter-spacing: 0.6px;
+        }
+
+        .nav-links { display:flex; align-items:center; gap:18px; }
+
+        .nav-links a {
+          text-decoration:none;
+          color: var(--dark);
+          font-weight: 600;
+          padding: 8px 10px;
+          border-radius: 10px;
+          position: relative;
+          transition: all .22s ease;
+        }
+
+        .nav-links a:hover {
+          color: #fff;
+          background: linear-gradient(90deg, rgba(67,160,71,0.95), rgba(34,139,34,0.95));
+          transform: translateY(-3px);
+          box-shadow: 0 8px 18px rgba(67,160,71,0.12);
+        }
+
+        .welcome-text { color: var(--accent); font-weight:600; margin-right:8px; }
+
+        /* ---------- HERO ---------- */
+        .hero-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          padding: 120px 20px 40px;
+          gap: 22px;
+          flex-wrap:wrap;
+        }
+
+        .hero-text { flex:1; min-width:300px; }
+        .hero-sub { font-size:28px; margin:12px 0; color:var(--dark); font-weight:600; }
+
+        /* hero-p will be populated & typed by JS; caret handled by CSS */
+        .hero-p {
+          font-size:18px;
+          color:#555;
+          margin-bottom:18px;
+          max-width:720px;
+          min-height:48px; /* keeps layout stable while typing */
+          white-space:normal;
+          overflow:visible;
+          position:relative;
+          display:inline-block;
+        }
+        /* blinking caret element */
+        .type-caret {
+          display:inline-block;
+          width:2px;
+          height:1.15em;
+          background: rgba(67,160,71,0.95);
+          margin-left:6px;
+          vertical-align:middle;
+          animation: blink-caret 0.8s step-end infinite;
+        }
+        @keyframes blink-caret {
+          0%,100% { opacity:0; }
+          50% { opacity:1; }
+        }
+
+        .cta-button {
+          background: var(--accent);
+          color: #fff;
+          border: none;
+          border-radius: 28px;
+          padding: 12px 28px;
+          font-size: 16px;
+          font-weight:700;
+          cursor:pointer;
+          box-shadow: 0 8px 20px rgba(67,160,71,0.12);
+          transition: transform .22s ease, box-shadow .22s ease;
+        }
+
+        .cta-button:hover {
+          transform: translateY(-4px) scale(1.02);
+          box-shadow: 0 12px 28px rgba(67,160,71,0.18);
+        }
+
+        .hero-image {
+          flex:0 0 420px;
+          border-radius:20px;
+          overflow:hidden;
+          box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+          transform-origin:center;
+          will-change: transform;
+        }
+
+        .hero-image img {
+          width:100%;
+          height:auto;
+          display:block;
+          transform-origin:center;
+          animation: heroFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes heroFloat {
+          0%   { transform: translateY(0) rotate(-0.8deg) scale(1); }
+          25%  { transform: translateY(-8px) rotate(0.6deg) scale(1.02); }
+          50%  { transform: translateY(0) rotate(-0.8deg) scale(1); }
+          75%  { transform: translateY(6px) rotate(0.6deg) scale(1.01); }
+          100% { transform: translateY(0) rotate(-0.8deg) scale(1); }
+        }
+
+        /* ---------- FOOD GRID ---------- */
+        .food-section { text-align:center; padding: 60px 20px; }
+        .food-section h2 { font-size:34px; color:var(--dark); margin-bottom:8px; }
+        .food-section p  { color:#555; margin-bottom:28px; font-size:16px; }
+
+        .food-grid {
+          display:grid;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 26px;
+          max-width: 1200px;
+          margin:0 auto;
+          align-items: stretch;
+        }
+
+        .food-card {
+          background: var(--light);
+          border-radius: 14px;
+          overflow:hidden;
+          box-shadow: 0 10px 30px var(--shadow);
+          transition: transform .28s ease, box-shadow .28s ease;
+          display:flex;
+          flex-direction: column;
+          height:100%;
+        }
+
+        .food-card:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .food-card .img-wrap {
+          width:100%;
+          height:180px;
+          overflow:hidden;
+          background: linear-gradient(180deg, #f6fff8, #ffffff);
+        }
+
+        .food-card img {
+          width:100%;
+          height:100%;
+          object-fit:cover;
+          display:block;
+          transition: transform .6s cubic-bezier(.2,.9,.2,1);
+        }
+
+        .food-card:hover img { transform: scale(1.07) rotate(-0.6deg); }
+
+        .food-info {
+          padding:16px;
+          display:flex;
+          flex-direction:column;
+          gap:10px;
+          flex:1;
+        }
+
+        .food-info h3 { font-size:18px; color:var(--accent); margin:0; }
+        .food-info p  { font-size:14px; color:#666; margin:0; flex:1; }
+        .price-tag { font-weight:700; color:var(--dark); font-size:15px; }
+
+        .order-btn {
+          background:var(--accent);
+          color:#fff;
+          padding:10px 14px;
+          border-radius:24px;
+          text-decoration:none;
+          font-weight:700;
+          display:inline-block;
+          text-align:center;
+          transition: transform .18s ease, box-shadow .18s ease;
+        }
+        .order-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(67,160,71,0.12); }
+
+        /* ---------- FOOTER ---------- */
+        footer {
+          background:#f6fff8;
+          padding:36px 20px;
+          text-align:center;
+          color:var(--dark);
+          margin-top:48px;
+        }
+        .footer-links a { color:var(--accent); margin:0 8px; text-decoration:none; font-weight:600; }
+        .footer-links a:hover { text-decoration:underline; }
+
+        /* responsive tweaks */
+        @media (max-width:1200px) {
+          .rainbow-title, .rainbow-text { font-size:4.2rem; }
+        }
+        @media (max-width:900px) {
+          .hero-container { padding: 90px 18px 30px; }
+          .rainbow-title, .rainbow-text { font-size: 3.6rem; }
+        }
+        @media (max-width:560px) {
+          .hero-container { padding: 70px 14px 20px; }
+          .rainbow-title, .rainbow-text { font-size: 2.6rem; display:block; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="nav">
+    <div class="nav-left">
+        <img src="../static/images/logo (3).png" th:src="@{/images/logo (3).png}" class="logo" alt="HomeBite logo">
+        <div class="brand-title">HomeBite-Connect</div>
+    </div>
+
+    <nav class="nav-links" role="navigation">
+        <span class="welcome-text" th:text="'Welcome, ' + ${userName}"></span>
+        <a th:href="@{/Frontpage}">Home</a>
+        <a th:href="@{/ShareFood}">ShareOrSwap</a>
+        <a th:href="@{/AI}">Create Dishes AI</a>
+        <a th:href="@{/Profile}">Profile</a>
+        <a th:href="@{/logout}" onclick="return confirmLogout()" id="logoutBtn" >Logout</a>
+    </nav>
+</header>
+
+<main>
+    <section class="hero-container" aria-label="Hero">
+        <div class="hero-text">
+            <!-- BIG rainbow title -->
+            <h1 class="rainbow-title rainbow-text">HomeBite Connect</h1>
+            <h2 class="hero-sub">Connecting Communities, One Meal at a Time</h2>
+
+            <!-- data-text contains the full string that will be typed -->
+            <div style="display:flex;align-items:center;gap:8px;">
+                <p id="heroDescription" class="hero-p" data-text="Join our community and enjoy the comfort of home-cooked meals made with love. Discover food sharing, swapping, and heartwarming flavors—all in one place."></p>
+                <span id="typeCaret" class="type-caret" aria-hidden="true"></span>
+            </div>
+
+            <button class="cta-button" onclick="window.location.href='ShareFood.html'">Get Started</button>
+        </div>
+
+        <div class="hero-image" aria-hidden="true">
+            <img src="../static/images/finalimage.png" th:src="@{/images/finalimage.png}" alt="Friends cooking together">
+        </div>
+    </section>
+
+    <section class="food-section" aria-label="Food list">
+        <h2>Delicious Homemade Meals 🍽️</h2>
+        <p>Choose from our community's best-loved dishes and enjoy the taste of home!</p>
+
+        <div class="food-container">
+            <div class="food-grid">
+                <div th:each="food : ${foodList}" class="food-card">
+                    <div class="img-wrap">
+                        <img th:src="@{${food.imageUrl}}" alt="Food image" />
+                    </div>
+                    <div class="food-info">
+                        <h3 th:text="${food.name}">Food Name</h3>
+                        <p th:text="${food.description}">Description</p>
+                        <span class="price-tag" th:text="'₹' + ${food.price}">₹100</span>
+                        <button class="order-btn"
+                                th:data-image="${food.imageUrl}"
+                                th:data-name="${food.name}"
+                                th:data-desc="${food.description}"
+                                th:data-price="${food.price}"
+                                onclick="selectFood(this)">
+                            Order Now
+                        </button>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="#">Terms</a>
+            <a href="#">Privacy</a>
+        </div>
+        <p>© 2025 HomeBite Connect | Connecting people through homemade food ❤️</p>
+    </footer>
+</main>
+
+<script>
+    function selectFood(buttonElement) {
+     const image = buttonElement.getAttribute("data-image");
+     const name = buttonElement.getAttribute("data-name");
+     const desc = buttonElement.getAttribute("data-desc");
+     const price = buttonElement.getAttribute("data-price");
+
+     const params = new URLSearchParams({ image, name, desc, price });
+
+     window.location.href = "/Conformationpage?" + params.toString();
+   }
+
+
+
+
+
+
+
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+          const textElement = document.getElementById("heroDescription");
+          const caret = document.getElementById("typeCaret");
+          const fullText = textElement.getAttribute("data-text");
+          let index = 0;
+
+          function typeWriter() {
+            if (index < fullText.length) {
+              textElement.textContent += fullText.charAt(index);
+              index++;
+              setTimeout(typeWriter, 40); // ⏱ speed control (lower = faster)
+            } else {
+              caret.style.display = "none"; // hide caret after typing
+            }
+          }
+
+          // Caret blinking effect
+          setInterval(() => {
+            caret.style.visibility = (caret.style.visibility === "hidden") ? "visible" : "hidden";
+          }, 500);
+
+          textElement.textContent = "";
+          typeWriter();
+        });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.href = '/logout';
+});
+
+
+
+</script>
+</body>
+</html>

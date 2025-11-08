@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HomeBite Connect | Reset Password</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #93e4be, #a0e0b2);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .reset-container {
+      background: white;
+      padding: 35px 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(67, 160, 71, 0.2);
+      width: 360px;
+      text-align: center;
+      opacity: 0;
+    }
+
+    h2 {
+      color: #2e7d32;
+      margin-bottom: 24px;
+      font-weight: 700;
+      font-size: 28px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      color: #2e7d32;
+      margin-bottom: 6px;
+      text-align: left;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border: 1.8px solid #d1e7d8;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: #43a047;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      background: #43a047;
+      color: white;
+      padding: 14px 0;
+      font-weight: 700;
+      font-size: 16px;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(67, 160, 71, 0.25);
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #66bb6a;
+    }
+
+    .message {
+      font-size: 16px;
+      margin-top: 16px;
+      color: #388e3c;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<div class="reset-container" id="resetContainer">
+  <h2>Reset Your Password</h2>
+  <form id="resetForm">
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" placeholder="you@example.com" required />
+
+    <label for="newPassword">New Password</label>
+    <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password" required />
+
+    <button type="submit">Reset Password</button>
+  </form>
+  <div id="message" class="message"></div>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    gsap.to('#resetContainer', { opacity: 1, duration: 1, ease: "power2.out" });
+  });
+
+  const form = document.getElementById('resetForm');
+  const messageDiv = document.getElementById('message');
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+
+    messageDiv.textContent = '';
+    const email = form.email.value.trim();
+    const newPassword = form.newPassword.value;
+
+    if (!email || !newPassword) {
+      messageDiv.textContent = 'Please fill all fields correctly.';
+      messageDiv.style.color = 'red';
+      return;
+    }
+
+    messageDiv.textContent = 'Resetting password...';
+    messageDiv.style.color = '#2e7d32';
+
+    try {
+      const response = await fetch('/resetPassword', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ email, newPassword })
+      });
+
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
+        const text = await response.text();
+        messageDiv.textContent = text;
+        if (text.toLowerCase().includes('error')){
+          messageDiv.style.color = 'red';
+        } else {
+          messageDiv.style.color = '#2e7d32';
+        }
+      }
+
+    } catch (error) {
+      messageDiv.textContent = 'Error resetting password. Try again.';
+      messageDiv.style.color = 'red';
+    }
+  });
+</script>
+
+</body>
+</html>

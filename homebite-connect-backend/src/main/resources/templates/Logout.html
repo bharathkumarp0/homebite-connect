@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logout - HomeBite Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+
+    body {
+      background: linear-gradient(135deg, #F0FFF4, #E9F1FF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .logout-page {
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .logo {
+      font-size: 36px;
+      font-weight: 700;
+      color: #4a90e2;
+      margin-bottom: 40px;
+    }
+
+    .logout-icon {
+      font-size: 80px;
+      color: #4a90e2;
+      margin-bottom: 25px;
+    }
+
+    .message {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .sub-message {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      margin: 10px;
+    }
+
+    .btn.logout {
+      background: #4a90e2;
+      color: white;
+    }
+    .btn.logout:hover {
+      background: #357ABD;
+    }
+
+    .btn.cancel {
+      background: transparent;
+      border: 2px solid #4a90e2;
+      color: #4a90e2;
+    }
+    .btn.cancel:hover {
+      background: #4a90e2;
+      color: white;
+    }
+
+    .footer {
+      margin-top: 50px;
+      font-size: 14px;
+      color: #777;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .logo { font-size: 28px; margin-bottom: 25px; }
+      .logout-icon { font-size: 60px; margin-bottom: 20px; }
+      .message { font-size: 20px; }
+      .sub-message { font-size: 14px; margin-bottom: 30px; }
+      .btn { font-size: 14px; padding: 10px 25px; margin: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="logout-page">
+  <div class="logo">HomeBite Connect</div>
+  <div class="logout-icon">🚪</div>
+  <div class="message">You are logged out!</div>
+  <div class="sub-message">Thank you for visiting. Sign in again to continue enjoying homemade delights.</div>
+
+  <div>
+    <button class="btn logout" onclick="loginRedirect()">Login Again</button>
+    <button class="btn cancel" onclick="homeRedirect()">Go to Home</button>
+  </div>
+
+  <div class="footer">Stay connected through homemade food ❤️</div>
+</div>
+
+<script>
+  function loginRedirect() {
+    window.location.href = "login.html"; // Redirect to login
+  }
+
+  function homeRedirect() {
+    window.location.href = "Frontpage.html"; // Redirect to home page
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>HomeBite Connect | Joyful Payment</title>
+
+    <!-- Google Fonts & GSAP -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <style>
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+          font-family: 'Poppins', sans-serif;
+          background: linear-gradient(145deg, #f0fff4, #eaf8ee);
+          overflow-x: hidden;
+          min-height: 100vh;
+          color: #222;
+          padding-top: 78px;
+        }
+
+        /* NAV */
+        .nav {
+          position: fixed; top: 0; left: 0; right: 0;
+          height: 78px;
+          background: #fff;
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 10px 24px;
+          box-shadow: 0 6px 22px rgba(0,0,0,0.08);
+          z-index: 1000;
+          flex-wrap: wrap;
+        }
+        .nav-left { display: flex; align-items: center; gap: 12px; }
+        .nav-logo { height: 44px; }
+        .brand { font-weight: 700; color: #2E7D32; font-size: 20px; }
+        .nav-links { display: flex; gap: 18px; flex-wrap: wrap; }
+        .nav-links a { text-decoration: none; color: #333; font-weight: 600; padding: 8px 10px; border-radius: 8px; }
+        .nav-links a:hover { color: #43a047; background: rgba(67,160,71,0.07); }
+
+        /* BACKGROUND SCENE */
+        .scene {
+          position: fixed;
+          top: 78px; left: 0; right: 0; bottom: 0;
+          overflow: hidden;
+          z-index: -1;
+          background: linear-gradient(#aee1f9 0%, #f0fff4 70%);
+        }
+        .cloud {
+          position: absolute;
+          width: 120px; height: 70px;
+          background: rgba(255,255,255,0.9);
+          border-radius: 50%;
+          filter: blur(2px);
+        }
+        .cloud::before, .cloud::after {
+          content: "";
+          position: absolute;
+          background: rgba(255,255,255,0.9);
+          width: 90px; height: 60px;
+          border-radius: 50%;
+        }
+        .cloud::before { top: -20px; left: 20px; }
+        .cloud::after { top: -10px; left: -20px; }
+
+        .road {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 120px;
+          background: #333;
+          box-shadow: inset 0 10px 0 rgba(255,255,255,0.2);
+        }
+        .lane {
+          position: absolute;
+          bottom: 55px;
+          width: 100%;
+          height: 6px;
+          background: repeating-linear-gradient(90deg, #fff 0 50px, transparent 50px 100px);
+          opacity: 0.7;
+        }
+
+        .delivery-boy {
+          position: absolute;
+          bottom: 100px;
+          left: -150px;
+          width: 180px;
+          z-index: 10;
+        }
+
+        /* MAIN CARD */
+        .center { max-width: 940px; margin: 0 auto; padding: 24px; }
+        .payment-card {
+          background: #ffffff;
+          border-radius: 18px;
+          box-shadow: 0 12px 36px rgba(0,0,0,0.08);
+          padding: 28px;
+          display: grid;
+          grid-template-columns: 1fr 420px;
+          gap: 28px;
+          align-items: start;
+          position: relative;
+          z-index: 2;
+        }
+        @media(max-width:880px){.payment-card{grid-template-columns:1fr;padding:20px;}}
+        .payment-header h2 { color: #2E7D32; font-size: 26px; margin-bottom: 6px; }
+        .summary { background: #f7fff7; border-radius: 12px; padding: 14px; border-left: 6px solid #43a047; margin-bottom: 18px; }
+        .summary .row { display: flex; justify-content: space-between; margin: 7px 0; font-size: 15px; }
+        .summary .total { font-weight: 700; font-size: 18px; color: #2E7D32; margin-top: 8px; border-top: 1px dashed #e6efe6; padding-top: 10px; }
+
+        .option { display: flex; align-items: center; justify-content: space-between; background: #fbfffb; border: 1.6px solid #dff6df;
+          padding: 12px; border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
+        .option:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(67,160,71,0.06); }
+        .option input { accent-color: #43a047; }
+        .payment-input { margin-top: 10px; display: none; }
+        .payment-input input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #d1d9d1; font-size: 15px; }
+
+        .order-preview { background: #fff; border-radius: 12px; padding: 16px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.6); }
+        .order-head { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+        .order-thumb { width: 84px; height: 84px; border-radius: 10px; background-size: cover; background-position: center; box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+        .price { font-size: 20px; font-weight: 800; color: #2e7d32; }
+        .qty-controls { display: flex; gap: 10px; align-items: center; margin-top: 14px; }
+        .qty-btn { background: #43a047; color: #fff; border: none; padding: 8px 12px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .confirm-btn { margin-top: 18px; width: 100%; background: linear-gradient(90deg,#43a047,#66bb6a); color: #fff; border: none;
+          padding: 14px; border-radius: 40px; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 10px 26px rgba(102,187,106,0.12); }
+        footer { text-align: center; color: #2e7d32; margin: 40px 0 60px 0; font-size: 14px; }
+
+        /* SUCCESS MESSAGE */
+        .success-message {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: #fff;
+          padding: 40px 60px;
+          border-radius: 20px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+          text-align: center;
+          z-index: 9999;
+        }
+        .success-icon {
+          width: 90px;
+          margin-bottom: 18px;
+          animation: pop 1s ease forwards;
+        }
+        @keyframes pop {
+          0% { transform: scale(0); opacity: 0; }
+          60% { transform: scale(1.2); opacity: 1; }
+          100% { transform: scale(1); }
+        }
+        .success-message h2 { color: #2E7D32; font-size: 28px; margin-bottom: 10px; }
+        .success-message p { color: #444; font-size: 16px; margin-bottom: 20px; }
+        .home-btn {
+          background: linear-gradient(90deg, #43a047, #66bb6a);
+          color: white;
+          border: none;
+          padding: 12px 26px;
+          border-radius: 30px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: 0.3s ease;
+        }
+        .home-btn:hover {
+          transform: scale(1.05);
+          box-shadow: 0 6px 20px rgba(67,160,71,0.25);
+        }
+
+        /* Your existing CSS styles from your code (omitted here for brevity) */
+
+    </style>
+</head>
+<body>
+<header class="nav">
+    <div class="nav-left">
+        <img class="nav-logo" th:src="@{/images/logo (3).png}" alt="HomeBite logo" />
+        <div class="brand">HomeBite Connect</div>
+    </div>
+    <nav class="nav-links" aria-label="main">
+        <a th:href="@{/Frontpage}">Home</a>
+        <a th:href="@{/ShareFood}">Share Food</a>
+        <a th:href="@{/Orders}">Orders</a>
+        <a th:href="@{/Swap}">Swap</a>
+        <a th:href="@{/Profile}">Profile</a>
+    </nav>
+</header>
+
+<div class="scene">
+    <div class="cloud" style="top:40px;left:-100px;"></div>
+    <div class="cloud" style="top:120px;left:300px;transform:scale(1.2);"></div>
+    <div class="cloud" style="top:80px;left:800px;transform:scale(0.8);"></div>
+    <div class="road"></div>
+    <div class="lane"></div>
+    <img th:src="@{/images/divfood.png}" alt="Delivery boy" class="delivery-boy" id="deliveryBoy" />
+</div>
+
+<main class="center">
+    <div class="payment-card" id="paymentCard">
+        <div>
+            <div class="payment-header">
+                <h2>Complete Secure Payment</h2>
+                <p>Enjoy a smooth and cheerful payment experience 🎉</p>
+            </div>
+            <div class="summary">
+                <div class="row"><div>Dish</div><div id="sDish">Loading...</div></div>
+                <div class="row"><div>Quantity</div><div id="sQty">Loading...</div></div>
+                <div class="row"><div>Price (per item)</div><div id="sPrice">Loading...</div></div>
+                <div class="row total"><div>Total</div><div id="sTotal">Loading...</div></div>
+            </div>
+            <div class="payment-options">
+                <h3>Select Payment</h3>
+                <div class="option" onclick="selectMethod('upi')"><div><input type="radio" name="pm" id="upi" checked /> UPI</div><div>Fastest</div></div>
+                <div class="payment-input" id="upiBox"><input type="text" placeholder="Enter UPI ID (e.g. name@upi)" /></div>
+                <div class="option" onclick="selectMethod('card')"><div><input type="radio" name="pm" id="card" /> Card</div><div>Secure</div></div>
+                <div class="payment-input" id="cardBox"><input type="text" placeholder="Enter Card Number" /></div>
+                <div class="option" onclick="selectMethod('cod')"><div><input type="radio" name="pm" id="cod" /> COD</div><div>On delivery</div></div>
+                <button class="confirm-btn" onclick="confirmPayment()">Confirm Payment</button>
+            </div>
+        </div>
+        <aside class="order-preview">
+            <div class="order-head">
+                <div class="order-thumb" id="orderThumb" style="background-size:cover; background-position:center; box-shadow:0 6px 18px rgba(0,0,0,0.08); border-radius:10px; width:84px; height:84px;">
+                </div>
+                <div>
+                    <h4 style="color:#2e7d32;" id="orderDishName">Loading...</h4>
+                    <p style="color:#666;">Veg • Fresh</p>
+                </div>
+            </div>
+            <div><strong>Delivery Address:</strong> <span id="deliveryAddress">Loading address...</span></div>
+            <div class="qty-controls">
+                <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                <div id="qtyDisplay">1</div>
+                <button class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<footer>© 2025 HomeBite Connect — Happy Payments, Happy Meals!</footer>
+
+<script>
+    let qty = 1;
+    let price = 120; // default
+
+    function refresh() {
+      document.getElementById('qtyDisplay').textContent = qty;
+      document.getElementById('sQty').textContent = qty;
+      document.getElementById('sTotal').textContent = '₹' + (qty * price);
+    }
+    function changeQty(d) {
+      qty = Math.max(1, qty + d);
+      refresh();
+      gsap.fromTo("#qtyDisplay", { scale: 0.9 }, { scale: 1, duration: 0.2 });
+    }
+    function selectMethod(m) {
+      document.getElementById('upiBox').style.display = (m === 'upi') ? 'block' : 'none';
+      document.getElementById('cardBox').style.display = (m === 'card') ? 'block' : 'none';
+    }
+    refresh();
+
+    // Cloud animation
+    gsap.to(".cloud", { x: "100vw", duration: 80, repeat: -1, ease: "none" });
+    // Delivery boy entrance animation
+    gsap.fromTo("#deliveryBoy",
+      { x: -200, opacity: 0 },
+      { x: window.innerWidth * 0.15, opacity: 1, duration: 4, ease: "power2.out" }
+    );
+
+    async function confirmPayment() {
+      const paymentCard = document.querySelector('.payment-card');
+      paymentCard.style.transition = "opacity 1s ease";
+      paymentCard.style.opacity = "0";
+
+      const orderDataStr = localStorage.getItem("orderData");
+      if (!orderDataStr) {
+        alert("Order data missing!");
+        paymentCard.style.opacity = "1";
+        return;
+      }
+      const orderData = JSON.parse(orderDataStr);
+
+      // Save confirmed order locally (could be sent to backend)
+      let confirmedOrdersJSON = localStorage.getItem("confirmedOrders");
+      let confirmedOrders = confirmedOrdersJSON ? JSON.parse(confirmedOrdersJSON) : [];
+
+      const newOrderId = Date.now();
+      const newOrder = {
+        id: newOrderId,
+        title: orderData.food.name,
+        desc: orderData.food.description,
+        img: orderData.food.image,
+        status: "Placed",
+        qty: orderData.quantity,
+        price: orderData.food.pricePerItem,
+        time: "Now"
+      };
+
+      confirmedOrders.push(newOrder);
+      localStorage.setItem("confirmedOrders", JSON.stringify(confirmedOrders));
+      localStorage.removeItem("orderData");
+
+      gsap.to("#deliveryBoy", {
+        x: window.innerWidth + 400,
+        duration: 2.2,
+        delay: 0.4,
+        ease: "power4.in",
+        onStart: () => gsap.to("#deliveryBoy", { scale: 1.08, duration: 0.3, yoyo: true, repeat: 1 }),
+        onComplete: () => {
+          showSuccessMessage();
+          setTimeout(() => { window.location.href = "/Orders"; }, 2500);
+        }
+      });
+    }
+
+    function showSuccessMessage() {
+      const html = `
+        <div class="success-message">
+          <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Success" class="success-icon" />
+          <h2>Payment Successful 🎉</h2>
+          <p>Your order is confirmed and will be delivered shortly!</p>
+          <button class="home-btn" onclick="window.location.href='/Orders'">Back to Orders</button>
+        </div>`;
+      document.body.insertAdjacentHTML("beforeend", html);
+      gsap.from(".success-message", { opacity: 0, scale: 0.8, duration: 0.8, ease: "power2.out" });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const orderDataStr = localStorage.getItem("orderData");
+      if (!orderDataStr) {
+        alert("No order data found. Please place an order first.");
+        window.location.href = "/";
+        return;
+      }
+      const orderData = JSON.parse(orderDataStr);
+
+      qty = orderData.quantity;
+      price = orderData.food.pricePerItem;
+
+      document.getElementById("orderDishName").textContent = orderData.food.name;
+      document.getElementById("sDish").textContent = orderData.food.name;
+      document.getElementById("sQty").textContent = qty;
+      document.getElementById("sPrice").textContent = "₹" + price;
+      document.getElementById("sTotal").textContent = "₹" + (price * qty);
+
+      document.querySelector('.order-thumb').style.backgroundImage = `url('${orderData.food.image}')`;
+
+      if (orderData.deliveryDetails) {
+        document.getElementById("deliveryAddress").textContent =
+          `${orderData.deliveryDetails.address}, ${orderData.deliveryDetails.city} - ${orderData.deliveryDetails.pincode}`;
+      } else {
+        document.getElementById("deliveryAddress").textContent = "Delivery address not available";
+      }
+      refresh();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New FoodCard</title>
+    <style>
+        body {
+          font-family: 'Segoe UI', sans-serif;
+          background: #f4f4f4;
+          margin: 0;
+          padding: 0;
+        }
+
+        .container {
+          max-width: 600px;
+          margin: 50px auto;
+          background: #fff;
+          padding: 30px;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+          text-align: center;
+          color: #333;
+          margin-bottom: 20px;
+        }
+
+        label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: bold;
+          color: #555;
+        }
+
+        input[type="text"], textarea, input[type="file"] {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 20px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          font-size: 16px;
+        }
+
+        textarea {
+          resize: vertical;
+          height: 100px;
+        }
+
+        .submit-btn {
+          background-color: #28a745;
+          color: white;
+          padding: 12px 20px;
+          border: none;
+          border-radius: 5px;
+          font-size: 16px;
+          cursor: pointer;
+          width: 100%;
+          transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+          background-color: #218838;
+        }
+
+        .back-link {
+          display: block;
+          text-align: center;
+          margin-top: 20px;
+          color: #007bff;
+          text-decoration: none;
+        }
+
+        .back-link:hover {
+          text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Add a New FoodCard</h2>
+    <form action="http://localhost:8080/addcard" method="post" enctype="multipart/form-data">
+        <label for="dishName">Dish Name</label>
+        <input type="text" id="dishName" name="dishName" placeholder="e.g., Masala Dosa" required />
+
+        <label for="description">Description</label>
+        <textarea id="description" name="descepration" placeholder="Describe the dish..." required></textarea>
+
+        <label for="image">Upload Image</label>
+        <input type="file" id="image" name="image" accept="image/*" required />
+
+        <button type="submit" class="submit-btn">Add FoodCard</button>
+    </form>
+    <a href="../templates/Frontpage.html"   th:href="${/Frontpage}" class="back-link">← Back to Frontpage</a>
+</div>
+</body>
+</html>

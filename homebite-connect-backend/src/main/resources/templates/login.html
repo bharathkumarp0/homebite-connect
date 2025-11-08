@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeBite Connect | Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+
+    body {
+      min-height: 100vh;
+      background: url('[[@{/images/login.png}]]') no-repeat center center / cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 35px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .login-container:hover { transform: translateY(-5px); }
+
+    .logo {
+      height: 70px; width: 70px; margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #ff5e62;
+      margin-bottom: 25px;
+      font-size: 28px;
+    }
+
+    .input-group { margin-bottom: 18px; text-align: left; }
+
+    .input-group label {
+      display: block; margin-bottom: 6px; font-weight: 600; color: #333;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      transition: all 0.3s;
+    }
+
+    .input-group input:focus {
+      border-color: #ff5e62;
+      box-shadow: 0 0 5px rgba(255,94,98,0.4);
+      outline: none;
+    }
+
+    .cta-button {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      background: #ff5e62;
+      color: #fff;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .cta-button:hover { background: #ff9966; }
+
+    .forgot-edit {
+      display: flex;
+      justify-content: space-between;
+      margin: 12px 0 20px 0;
+      font-size: 14px;
+    }
+
+    .forgot-edit a {
+      color: #ff5e62;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .forgot-edit a:hover { color: #ff9966; }
+
+    .login-footer {
+      font-size: 14px;
+      margin-top: 18px;
+      color: #555;
+    }
+
+    .login-footer a {
+      color: #ff5e62;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-footer a:hover { color: #ff9966; }
+
+    @media (max-width: 480px) {
+      .login-container { padding: 30px 20px; }
+      h1 { font-size: 24px; }
+      .btn { font-size: 15px; padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <img th:src="@{/images/logo (3).png}" class="logo" alt="HomeBite Logo" />
+  <h1>Login</h1>
+  <form th:action="@{/loginUser}" method="post">
+    <div class="input-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+    </div>
+
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+    </div>
+
+    <div class="forgot-edit">
+      <a th:href="@{/reset}">Forgot Password?</a>
+      <a th:href="@{/reset}">Edit</a>
+    </div>
+
+    <button type="submit" class="cta-button">Login</button>
+    <p th:if="${error}" th:text="${error}" style="color:red; font-weight:600;"></p>
+
+  </form>
+
+  <div class="login-footer">
+    Don't have an account? <a th:href="@{/signup}">Sign Up</a>
+  </div>
+</div>
+
+</body>
+<script>
+
+  localStorage.clear();
+sessionStorage.clear();
+
+</script>
+
+
+</html>

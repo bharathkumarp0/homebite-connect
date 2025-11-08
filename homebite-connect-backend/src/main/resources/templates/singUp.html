@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeBite Connect | Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+          background: url('[[@{/images/singup.png}]]') no-repeat center center / cover;
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 20px;
+          background-size: cover;
+        }
+
+        .signup-container {
+          background: rgba(255, 255, 255, 0.95);
+          padding: 35px 30px;
+          border-radius: 20px;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+          width: 100%;
+          max-width: 400px;
+          text-align: center;
+          transition: transform 0.3s ease;
+        }
+
+        .signup-container:hover {
+          transform: translateY(-5px);
+        }
+
+        .logo {
+          height: 80px;
+          width: 80px;
+          margin-bottom: 20px;
+        }
+
+        h1 {
+          color: #ff5e62;
+          margin-bottom: 25px;
+          font-size: 28px;
+        }
+
+        .input-group {
+          margin-bottom: 18px;
+          text-align: left;
+        }
+
+        .input-group label {
+          display: block;
+          margin-bottom: 6px;
+          font-weight: 600;
+          color: #333;
+        }
+
+        .input-group input {
+          width: 100%;
+          padding: 12px 15px;
+          border-radius: 10px;
+          border: 1px solid #ddd;
+          transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+          border-color: #ff5e62;
+          box-shadow: 0 0 5px rgba(255,94,98,0.4);
+          outline: none;
+        }
+
+        .terms {
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          margin-bottom: 25px;
+        }
+
+        .terms input {
+          margin-right: 10px;
+          width: 18px;
+          height: 18px;
+          cursor: pointer;
+        }
+
+        .terms a {
+          color: #ff5e62;
+          text-decoration: none;
+          font-weight: 600;
+        }
+
+        .terms a:hover {
+          color: #ff9966;
+        }
+
+        .btn {
+          width: 100%;
+          padding: 13px;
+          border: none;
+          border-radius: 12px;
+          background: #ff5e62;
+          color: #fff;
+          font-weight: 600;
+          font-size: 16px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+          background: #ff9966;
+        }
+
+        .signup-footer {
+          font-size: 14px;
+          margin-top: 18px;
+          color: #555;
+        }
+
+        .signup-footer a {
+          color: #ff5e62;
+          font-weight: 600;
+          text-decoration: none;
+        }
+
+        .signup-footer a:hover {
+          color: #ff9966;
+        }
+
+        @media (max-width: 480px) {
+          .signup-container {
+            padding: 30px 20px;
+          }
+          h1 { font-size: 24px; }
+          .btn { font-size: 15px; padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="signup-container">
+    <img th:src="@{/images/logo (3).png}" class="logo" alt="HomeBite Logo" />
+    <h1>Create Account</h1>
+
+    <form th:action="@{/adduser}" method="post" enctype="multipart/form-data">
+        <div class="input-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+        </div>
+
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <div class="input-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+        </div>
+
+        <div class="terms">
+            <input type="checkbox" id="terms" required>
+            <label for="terms">I agree to the <a href="#">Terms & Conditions</a></label>
+        </div>
+
+        <button type="submit" class="btn">Sign Up</button>
+    </form>
+
+    <div class="signup-footer">
+        Already have an account? <a th:href="@{/login}">Login</a>
+    </div>
+</div>
+
+</body>
+</html>

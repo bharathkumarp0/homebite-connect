@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>HomeBite Connect | Orders</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{
+          font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+          background:linear-gradient(135deg,#f4fff6,#eef7ff);
+          color:#222;
+          min-height:100vh;
+          -webkit-font-smoothing:antialiased;
+          -moz-osx-font-smoothing:grayscale;
+        }
+        header{
+          position:sticky;top:0;left:0;right:0;
+          display:flex;align-items:center;justify-content:space-between;
+          padding:14px 24px;background:#fff;border-bottom:1px solid rgba(0,0,0,0.04);
+          z-index:40;box-shadow:0 6px 18px rgba(16,24,40,0.06);
+        }
+        .brand {
+          display:flex;align-items:center;gap:12px;font-weight:700;color:#2E7D32;font-size:18px;
+        }
+        .nav-links{display:flex;gap:14px}
+        .nav-links a{color:#2b2b2b;text-decoration:none;font-weight:600;padding:6px 10px;border-radius:8px}
+        .nav-links a:hover{background:rgba(46,125,50,0.06);color:#2E7D32}
+        .hero {text-align:center;padding:40px 16px 10px}
+        .hero h1{
+          font-size:34px;font-weight:800;
+          background:linear-gradient(90deg,#2E7D32,#51A85A);
+          -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+          letter-spacing:-0.5px;margin-bottom:8px;
+        }
+        .hero p{color:#556;font-size:15px}
+        .wrap{max-width:1200px;margin:20px auto;padding:0 18px}
+        .orders-grid{
+          display:grid;
+          grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+          gap:22px;
+          margin-top:18px;
+        }
+        .card{
+          background:#fff;border-radius:14px;overflow:hidden;
+          box-shadow:0 10px 30px rgba(11,22,50,0.06);transition:transform .35s,box-shadow .35s;
+          position:relative;
+        }
+        .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(11,22,50,0.09)}
+        .media{
+          width:100%;height:180px;background-size:cover;background-position:center;
+        }
+        .content{padding:16px}
+        .title{font-weight:700;color:#2E7D32;font-size:18px}
+        .desc{color:#555;font-size:14px;margin-top:6px}
+        .meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}
+        .status-pill{padding:6px 12px;border-radius:999px;color:#fff;font-weight:700;font-size:13px;text-transform:capitalize}
+        .status-placed{background:#43a047}
+        .status-cooking{background:#ffb300;color:#2b2b2b}
+        .status-onway{background:#1e88e5}
+        .status-delivered{background:#6a1b9a}
+        .cancel-btn{background:#ef5350;border:none;color:#fff;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700}
+        .cancel-btn:hover{background:#d32f2f}
+        .empty{background:linear-gradient(90deg,#ffffff,#fbfffb);border-radius:12px;padding:60px;text-align:center;color:#666;box-shadow:0 8px 20px rgba(11,22,50,0.04)}
+        footer{padding:36px 0;text-align:center;color:#2E7D32;font-weight:600}
+        @media(max-width:720px){
+          header{padding:12px};
+          .hero h1{font-size:26px};
+          .media{height:160px};
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="brand">
+        <img th:src="@{/images/logo (3).png}"  alt="logo" style="height:40px;border-radius:8px;object-fit:cover" />
+        <div>HomeBite Connect</div>
+    </div>
+    <nav class="nav-links" aria-label="main">
+        <a th:href="@{/Frontpage}">Home</a>
+        <a th:href="@{/ShareFood}">Share Food</a>
+        <a th:href="@{/Orders}">Orders</a>
+        <a th:href="@{/Swap}">Swap</a>
+        <a th:href="@{/Profile}">Profile</a>
+    </nav>
+</header>
+<section class="hero">
+    <h1>Your Orders</h1>
+    <p>See current orders, their progress, and history.</p>
+</section>
+<div class="wrap">
+    <div class="orders-grid" aria-live="polite">
+        <article th:each="order : ${orders}" class="card" th:data-id="${order.id}">
+            <div class="media" role="img" aria-label="Order image"
+                 th:style="|background-image: url('${#strings.isEmpty(order.food_image) ? '/images/placeholder-food.png' : order.food_image}')|"></div>
+            <div class="content">
+                <div class="title" th:text="${order.food_name}">Food Name</div>
+                <div class="desc" th:text="'Qty: ' + ${order.quantity} + ' • ₹' + ${order.unit_price}">Qty and Price</div>
+                <div class="meta-row">
+                    <div th:id="'status-' + ${order.id}" th:text="${order.order_status}" th:classappend="' status-' + ${order.order_status.toLowerCase()}"></div>
+                    <button class="cancel-btn" th:if="${order.order_status != 'Delivered'}" type="button" th:data-id="${order.id}">Cancel</button>
+                </div>
+            </div>
+        </article>
+        <div th:if="${#lists.isEmpty(orders)}" class="empty">
+            No orders yet. Share a meal or place your first order 🍽️
+        </div>
+    </div>
+</div>
+<footer>© 2025 HomeBite Connect — Delivering smiles, one meal at a time</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+   const container = document.querySelector('.orders-grid');
+
+   function loadOrders() {
+     fetch('/orders/userOrders')
+       .then(res => res.json())
+       .then(orders => {
+         container.innerHTML = '';
+         if (!orders.length) {
+           container.innerHTML = `<div class="empty">No orders yet. Share a meal or place your first order 🍽️</div>`;
+           return;
+         }
+         orders.forEach(order => {
+           container.innerHTML += `
+             <article class="card" data-id="${order.id}">
+               <div class="media" style="background-image:url('${order.foodImage || '/images/placeholder-food.png'}')"></div>
+               <div class="content">
+                 <div class="title">${order.foodName}</div>
+                 <div class="desc">Qty: ${order.quantity} • ₹${order.unitPrice}</div>
+                 <div class="meta-row">
+                   <div class="status-pill status-${order.orderStatus.toLowerCase()}">${order.orderStatus}</div>
+                   ${order.orderStatus !== "Delivered" ? `<button class="cancel-btn" data-id="${order.id}">Cancel</button>` : ""}
+                 </div>
+               </div>
+             </article>
+           `;
+         });
+         addCancelListeners();
+       });
+   }
+
+   function addCancelListeners() {
+     document.querySelectorAll('.cancel-btn').forEach(button => {
+       button.addEventListener('click', function() {
+         const orderId = this.getAttribute('data-id');
+
+         if (confirm("Are you sure you want to cancel this order?")) {
+           fetch(`/orders/delete/${orderId}`, {
+             method: 'DELETE'
+           })
+           .then(response => {
+             if (response.ok) {
+               alert('Order canceled successfully.');
+               loadOrders(); // reload orders to refresh UI
+             } else {
+               alert('Failed to cancel order.');
+             }
+           })
+           .catch(() => alert('Network error, please try again.'));
+         }
+       });
+     });
+   }
+
+   // Initial load of orders
+   loadOrders();
+ });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | HomeBite Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="icon" th:href="@{/images/logo (3).png}" type="image/png" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #F0FFF4;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background-color: #F0FFF4;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header img {
+      height: 50px;
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: #18472E;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #4D96FF;
+    }
+
+    .about-hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 80px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .about-text {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .about-text h1 {
+      font-size: 42px;
+      font-weight: 700;
+      color: #2E8B57;
+      margin-bottom: 20px;
+    }
+
+    .about-text p {
+      font-size: 17px;
+      color: #444;
+      line-height: 1.7;
+      margin-bottom: 15px;
+    }
+
+    .about-image {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+
+    .about-image img {
+      width: 90%;
+      max-width: 450px;
+      border-radius: 25px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      transition: transform 0.6s ease;
+    }
+
+    .about-image:hover img {
+      transform: scale(1.05);
+    }
+
+    .features {
+      background-color: #ffffff;
+      border-radius: 30px;
+      margin: 60px auto;
+      padding: 60px 30px;
+      max-width: 1100px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .features h2 {
+      text-align: center;
+      color: #2E8B57;
+      margin-bottom: 40px;
+      font-size: 30px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+    }
+
+    .feature {
+      background: #F0FFF4;
+      border-radius: 20px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature h3 {
+      color: #4D96FF;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .feature p {
+      color: #555;
+      font-size: 15px;
+    }
+
+    footer {
+      background-color: #18472E;
+      color: #fff;
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 15px;
+      border-top: 5px solid #4D96FF;
+    }
+
+    footer a {
+      color: #FFD93D;
+      margin: 0 8px;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .about-hero {
+        flex-direction: column-reverse;
+        text-align: center;
+      }
+      .about-text h1 {
+        font-size: 34px;
+      }
+      .about-image img {
+        width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img  src="/static/images/logo%20(3).png" th:src="@{/images/logo (3).png}" alt="HomeBite Logo" />
+  <nav>
+    <a href="../static/templates/Frontpage.html" th:href="@{/}">Home</a>
+    <a  href="ShareFood.html" th:href="@{/ShareFood}">Share Food</a>
+    <a  href="Orders.html" th:href="@{/Orders}">Orders</a>
+    <a  href="Swap.html" th:href="@{/Swap}">Swap</a>
+    <a  href="Profile.html" th:href="@{/profile}">Profile</a>
+  </nav>
+</header>
+
+<section class="about-hero">
+  <div class="about-text">
+    <h1>About HomeBite Connect</h1>
+    <p>HomeBite Connect is a platform designed to connect food lovers and home chefs. Our mission is to promote sharing, reduce food waste, and create stronger communities through the joy of homemade meals.</p>
+    <p>We believe in bringing people together, one meal at a time. Whether you’re sharing extra food, swapping dishes, or discovering new flavors from your neighborhood, HomeBite makes it easy and fun!</p>
+  </div>
+  <div class="about-image">
+    <img   src="/static/images/finalimage.png" th:src="@{/images/finalimage.png}" alt="Cooking together" />
+  </div>
+</section>
+
+<section class="features">
+  <h2>Why Choose HomeBite?</h2>
+  <div class="feature-grid">
+    <div class="feature">
+      <h3>🌿 Sustainable Sharing</h3>
+      <p>Reduce food waste by sharing your delicious home-cooked meals with neighbors.</p>
+    </div>
+    <div class="feature">
+      <h3>🤝 Community Connection</h3>
+      <p>Meet local food enthusiasts and build lasting relationships through shared meals.</p>
+    </div>
+    <div class="feature">
+      <h3>🍱 Easy Swaps</h3>
+      <p>Swap dishes easily and try new cuisines right from your own neighborhood.</p>
+    </div>
+    <div class="feature">
+      <h3>💬 Secure & Transparent</h3>
+      <p>Our platform ensures safe interactions and trustworthy connections between users.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 HomeBite Connect | Bringing Communities Together Through Food ❤️</p>
+  <p>
+    <a href="#" th:href="@{/about}">About</a> |
+    <a href="#">Contact</a> |
+    <a href="#">Terms</a> |
+    <a href="#">Privacy</a>
+  </p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script>
+  gsap.from(".about-text h1", {opacity:0, y:-30, duration:1, ease:"power2.out"});
+  gsap.from(".about-text p", {opacity:0, y:40, duration:1, delay:0.3, stagger:0.2, ease:"power2.out"});
+  gsap.from(".about-image img", {opacity:0, x:50, duration:1.2, ease:"power3.out"});
+  gsap.from(".feature", {opacity:0, y:50, duration:1, stagger:0.2, delay:0.6, ease:"back.out(1.7)"});
+</script>
+
+</body>
+</html>

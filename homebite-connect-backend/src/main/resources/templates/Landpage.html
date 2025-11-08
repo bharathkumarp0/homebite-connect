@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome | HomeBite Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Titan+One&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    :root {
+      --orange: #FF7043;
+      --green: #4CAF50;
+      --teal: #009688;
+      --bg-light: #FFF8E1;
+      --shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-light);
+      color: #2E3A59;
+      overflow-x: hidden;
+    }
+
+    /* NAVBAR */
+    nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+
+    nav h2 {
+      font-family: 'Titan One', cursive;
+      font-size: 28px;
+      color: var(--orange);
+      letter-spacing: 1px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .nav-btn {
+      font-size: 15px;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-btn.getstarted {
+      background: linear-gradient(90deg, var(--green), var(--teal));
+      color: #fff;
+    }
+    .nav-btn.signup {
+      background: #fff;
+      border: 2px solid var(--orange);
+      color: var(--orange);
+    }
+    .nav-btn.login {
+      background: var(--orange);
+      color: #fff;
+    }
+    .nav-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      opacity: 0.95;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      position: relative;
+      height: 100vh;
+      background: linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.85)),
+                  url('/static/images/landimage.png') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 10%;
+      overflow: hidden;
+    }
+
+    .badge {
+      background: rgba(255,255,255,0.95);
+      color: var(--orange);
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
+
+    .hero h1 {
+      font-family: 'Titan One', cursive;
+      font-size: 56px;
+      line-height: 1.2;
+      color: #1b1b1b;
+      margin-bottom: 20px;
+      max-width: 700px;
+      z-index: 2;
+    }
+
+    .hero h1 span { color: var(--orange); }
+    .hero h1 .love { color: var(--teal); }
+
+    .hero p {
+      font-size: 18px;
+      max-width: 550px;
+      color: #333;
+      margin-bottom: 40px;
+      z-index: 2;
+    }
+
+    /* HOW IT WORKS */
+    .how-it-works {
+      padding: 80px 8%;
+      background: #ffffff;
+      text-align: center;
+    }
+
+    .how-it-works h2 {
+      font-family: 'Titan One';
+      font-size: 38px;
+      margin-bottom: 40px;
+      background: linear-gradient(90deg, var(--green), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .step {
+      background: #fefefe;
+      border-radius: 20px;
+      padding: 35px 25px;
+      box-shadow: var(--shadow);
+      transition: all 0.4s;
+    }
+
+    .step:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .step img {
+      width: 70px;
+      margin-bottom: 15px;
+    }
+
+    .step h3 {
+      color: var(--orange);
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    /* FEATURES */
+    .features {
+      padding: 80px 8%;
+      background: #f9f9f9;
+      text-align: center;
+    }
+
+    .features h2 {
+      font-family: 'Titan One';
+      font-size: 38px;
+      background: linear-gradient(90deg, var(--green), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .features p {
+      color: #555;
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .feature {
+      background: #fff;
+      padding: 35px 25px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      transition: transform 0.4s, box-shadow 0.4s;
+    }
+
+    .feature:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .feature img { width: 70px; margin-bottom: 15px; }
+    .feature h3 { color: var(--green); font-size: 20px; margin-bottom: 10px; }
+
+    /* FOOTER */
+    footer {
+      background: linear-gradient(90deg, var(--green), var(--teal));
+      color: white;
+      text-align: center;
+      padding: 25px 20px;
+      position: relative;
+    }
+
+    footer::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      background: url('https://svgshare.com/i/14uz.svg') repeat-x bottom;
+      background-size: cover;
+    }
+
+    @media(max-width:768px){
+      nav {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+      nav h2 { font-size: 22px; }
+      .nav-buttons { flex-wrap: wrap; justify-content: center; }
+      .hero { align-items: center; text-align: center; padding: 0 20px; }
+      .hero h1 { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <h2>HomeBite Connect</h2>
+  <div class="nav-buttons">
+    <button class="nav-btn getstarted" th:href="${/templates/signUp}" onclick="window.location.href='/Frontpage'">Get Started</button>
+    <button class="nav-btn signup"   th:href="${/templates/signUp}" onclick="window.location.href='/signup'">Sign Up</button>
+    <button class="nav-btn login"  th:href="${/templates/signUp}" onclick="window.location.href='/login'">Login</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge">🍴 Welcome to HomeBite Connect</div>
+  <h1>Discover, <span>Share</span> & <span class="love">Swap</span> Homemade Meals</h1>
+  <p>Join a community of food lovers who share, swap, and explore fresh homemade dishes every day.</p>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works">
+  <h2>How It Works</h2>
+  <div class="steps">
+    <div class="step">
+      <img src="https://cdn-icons-png.flaticon.com/512/1046/1046865.png" alt="Step 1">
+      <h3>1. Create Your Account</h3>
+      <p>Sign up in seconds and personalize your food preferences.</p>
+    </div>
+    <div class="step">
+      <img src="https://cdn-icons-png.flaticon.com/512/1046/1046857.png" alt="Step 2">
+      <h3>2. Share Your Dish</h3>
+      <p>Upload your food details and share them with your community.</p>
+    </div>
+    <div class="step">
+      <img src="https://cdn-icons-png.flaticon.com/512/3456/3456426.png" alt="Step 3">
+      <h3>3. Swap or Order</h3>
+      <p>Discover delicious dishes near you and enjoy new flavors.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <h2>Why Choose HomeBite?</h2>
+  <p>Join a community built around good food, sustainability, and sharing happiness!</p>
+
+  <div class="feature-grid">
+    <div class="feature">
+      <img src="https://cdn-icons-png.flaticon.com/512/3177/3177361.png" alt="Community">
+      <h3>Connect Locally</h3>
+      <p>Meet neighbors who share your love for homemade food and cultural cuisines.</p>
+    </div>
+    <div class="feature">
+      <img src="https://cdn-icons-png.flaticon.com/512/1046/1046857.png" alt="Swap">
+      <h3>Share or Swap</h3>
+      <p>Post your dishes or exchange meals for something exciting and new nearby.</p>
+    </div>
+    <div class="feature">
+      <img src="https://cdn-icons-png.flaticon.com/512/3456/3456426.png" alt="AI Ideas">
+      <h3>Smart Food Ideas</h3>
+      <p>Get suggestions for trending dishes or what others are sharing in your area.</p>
+    </div>
+    <div class="feature">
+      <img src="https://cdn-icons-png.flaticon.com/512/1046/1046865.png" alt="Eco">
+      <h3>Reduce Waste</h3>
+      <p>Be part of a sustainable movement — share leftovers, not waste!</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2025 HomeBite Connect | Built with ❤️ for Food Lovers Everywhere
+</footer>
+
+<script>
+  gsap.from("nav h2", {opacity:0, y:-20, duration:0.8});
+  gsap.from(".nav-buttons .nav-btn", {opacity:0, y:-20, stagger:0.15, duration:0.8});
+  gsap.from(".badge", {opacity:0, y:-30, duration:1, delay:0.3});
+  gsap.from(".hero h1", {opacity:0, y:50, duration:1, delay:0.6});
+  gsap.from(".hero p", {opacity:0, y:30, duration:1, delay:0.9});
+
+  gsap.utils.toArray(".step, .feature").forEach((el, i) => {
+    gsap.from(el, {
+      scrollTrigger: { trigger: el, start: "top 85%" },
+      opacity: 0,
+      y: 40,
+      duration: 0.8,
+      delay: i * 0.1
+    });
+  });
+</script>
+</body>
+</html>

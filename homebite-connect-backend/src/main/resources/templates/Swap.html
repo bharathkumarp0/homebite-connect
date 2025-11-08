@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swap Dishes | HomeBite Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Poppins',sans-serif; background:#fafafa; color:#333; }
+    a { text-decoration:none; color:inherit; }
+    img { display:block; width:100%; height:auto; }
+
+    header.navbar {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:15px 50px; background:#ff7043; color:#fff;
+      position:sticky; top:0; z-index:1000; box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
+    header.navbar .logo-area { display:flex; align-items:center; gap:12px; }
+    header.navbar .logo-area img { width:50px; height:50px; border-radius:50%; }
+    header.navbar .logo-area .logo-text { font-size:24px; font-weight:600; }
+    header.navbar nav a { margin-left:20px; font-weight:500; transition:transform .2s, color .2s; }
+    header.navbar nav a:hover { transform:translateY(-2px); color:#ffe0b2; }
+
+    .hero {
+      background: linear-gradient(to right bottom, #fff8f0, #ffece4);
+      text-align:center; padding:60px 20px;
+    }
+    .hero h1 {
+      font-size:38px; margin-bottom:10px; color:#ff7043;
+      animation: fadeInDown 1s ease both;
+    }
+    .hero p { font-size:18px; color:#666; animation: fadeInUp 1s ease both; }
+
+    @keyframes fadeInDown { from {opacity:0; transform:translateY(-30px);} to {opacity:1; transform:translateY(0);} }
+    @keyframes fadeInUp { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+
+    .tabs { display:flex; justify-content:center; margin:30px 0; }
+    .tabs .tab {
+      padding:12px 25px; background:#fff; border:2px solid #ff7043; border-radius:25px;
+      margin:0 10px; cursor:pointer; font-weight:600; color:#ff7043;
+      transition:background .3s, color .3s, transform .3s;
+    }
+    .tabs .tab.active { background:#ff7043; color:#fff; transform:scale(1.05); }
+    .tabs .tab:hover { transform:scale(1.02); }
+
+    .card-container {
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr));
+      gap:30px; padding:0 50px 50px;
+    }
+    .dish-card {
+      background:#fff; border-radius:20px; overflow:hidden;
+      box-shadow:0 4px 12px rgba(0,0,0,0.06); transition:transform .3s, box-shadow .3s;
+      animation: cardFadeIn .8s ease both;
+    }
+    .dish-card:hover { transform:translateY(-8px); box-shadow:0 8px 20px rgba(0,0,0,0.12); }
+    @keyframes cardFadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+    .dish-card .card-img img { height:180px; object-fit:cover; }
+    .dish-card .card-body { padding:20px; }
+    .dish-card .card-body h2 { color:#ff7043; font-size:20px; margin-bottom:8px; }
+    .dish-card .card-body p { font-size:14px; color:#555; margin:6px 0; }
+    .swap-btn {
+      display:inline-block; background:#ff7043; color:#fff;
+      border:none; border-radius:25px; padding:10px 20px; margin-top:12px;
+      cursor:pointer; font-weight:600; transition:transform .2s, box-shadow .2s;
+    }
+    .swap-btn:hover { transform:scale(1.07); box-shadow:0 6px 14px rgba(255,112,67,0.4); }
+
+    .empty-card {
+      background:#fffaf8; border-radius:15px; padding:40px;
+      text-align:center; color:#8a6d5a; font-weight:500;
+    }
+
+    footer { text-align:center; padding:20px; background:#ff7043; color:#fff; margin-top:40px; }
+
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
+
+    /* 🔹 Modal for Edit Form */
+    .modal {
+      display:none; position:fixed; z-index:2000; left:0; top:0;
+      width:100%; height:100%; overflow:auto;
+      background-color:rgba(0,0,0,0.5); animation:fadeIn .3s ease;
+    }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+    .modal-content {
+      background:#fff; margin:5% auto; padding:30px; border-radius:20px;
+      width:90%; max-width:500px; box-shadow:0 4px 20px rgba(0,0,0,0.2);
+      animation:slideUp .4s ease;
+    }
+    @keyframes slideUp { from{transform:translateY(50px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+    .modal-content h2 { text-align:center; color:#ff7043; margin-bottom:20px; }
+    .modal-content label { font-weight:600; display:block; margin-top:10px; }
+    .modal-content input, .modal-content textarea {
+      width:100%; padding:10px; margin-top:6px; border-radius:10px;
+      border:1px solid #ddd; outline:none; font-size:14px;
+    }
+    .modal-content button {
+      margin-top:15px; width:100%; padding:10px; background:#ff7043;
+      color:#fff; border:none; border-radius:25px; font-weight:600;
+      cursor:pointer; transition:0.3s;
+    }
+    .modal-content button:hover { transform:scale(1.05); }
+    .close-btn { float:right; font-size:22px; cursor:pointer; color:#ff7043; font-weight:bold; }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo-area">
+    <img th:src="@{/images/logo (3).png}" alt="logo" />
+    <div class="logo-text">HomeBite Connect</div>
+  </div>
+  <nav>
+    <a th:href="@{/Frontpage}">Home</a>
+    <a th:href="@{/ShareFood}">Share Food</a>
+    <a th:href="@{/Orders}">Orders</a>
+    <a th:href="@{/profile}">Profile</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>🔄 Swap Delicious Homemade Dishes</h1>
+  <p>Explore tasty creations, share your dish & connect with food lovers near you.</p>
+</section>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('available')">Available Swaps</button>
+  <button class="tab" onclick="showTab('mySwaps')">My Swaps</button>
+  <button class="tab" onclick="showTab('requests')">Swap Requests</button>
+</div>
+
+
+<section id="available" class="tab-content active">
+  <div class="card-container">
+    <div class="dish-card" th:each="swap : ${availableSwaps}">
+      <div class="card-img">
+<!--        <img th:if="${swap.imageUrl != null}" th:src="@{${swap.imageUrl}}" alt="Request Dish" />-->
+
+        <img th:if="${swap.imageUrl != null}" th:src="@{${swap.imageUrl}}" alt="Dish Image" />
+
+
+      </div>
+      <div class="card-body">
+        <h2 th:text="${swap.dishName}">Dish Name</h2>
+        <p><strong>Category:</strong> <span th:text="${swap.category}"></span></p>
+        <p th:text="${swap.description}">Dish description</p>
+        <p><strong>Location:</strong> <span th:text="${swap.location}"></span></p>
+        <p><strong>Quantity:</strong> <span th:text="${swap.quantity}"></span></p>
+        <p><strong>Wants in return:</strong> <span th:text="${swap.preferredSwapFor != null ? swap.preferredSwapFor : 'Not specified'}"></span></p>
+        <button class="swap-btn">Request Swap</button>
+      </div>
+    </div>
+    <div th:if="${#lists.isEmpty(availableSwaps)}" class="empty-card">
+      <p>No swaps available right now.<br>Be the first to share your dish!</p>
+    </div>
+  </div>
+</section>
+
+<section id="mySwaps" class="tab-content">
+
+  <div class="card-container">
+    <div class="dish-card" th:each="swap : ${mySwaps}">
+      <div class="card-img">
+<!--        <img th:if="${swap.imageUrl != null}" th:src="${swap.imageUrl}" alt="Request Dish" />-->
+        <img th:if="${swap.imageUrl != null}" th:src="@{${swap.imageUrl}}" alt="Dish Image" />
+
+
+
+
+        <!--        <img th:src="@{'/uploads/' + ${swap.imageUrl}}"-->
+<!--             th:alt="${swap.dishName}"-->
+<!--             onerror="this.src='https://via.placeholder.com/340x210?text=No+Image';" />-->
+      </div>
+      <div class="card-body">
+        <h2 th:text="${swap.dishName}">My Dish</h2>
+        <p><strong>Category:</strong> <span th:text="${swap.category}"></span></p>
+        <p th:text="${swap.description}">Dish description</p>
+        <p><strong>Location:</strong> <span th:text="${swap.location}"></span></p>
+        <p><strong>Quantity:</strong> <span th:text="${swap.quantity}"></span></p>
+        <p><strong>Wants in return:</strong> <span th:text="${swap.preferredSwapFor != null ? swap.preferredSwapFor : 'Not specified'}"></span></p>
+        <div style="display:flex; gap:12px; margin-top:10px;">
+          <button class="swap-btn" onclick="openEditModal(this)"
+                  th:data-id="${swap.id}"
+                  th:data-dish="${swap.dishName}"
+                  th:data-category="${swap.category}"
+                  th:data-description="${swap.description}"
+                  th:data-location="${swap.location}"
+                  th:data-quantity="${swap.quantity}"
+                  th:data-swapfor="${swap.preferredSwapFor}">Edit</button>
+          <button class="swap-btn" style="background:#ffa08c;" th:onclick="'window.location.href=\'/deleteSwap/' + ${swap.id} + '\';'">Delete</button>
+        </div>
+      </div>
+    </div>
+    <div th:if="${#lists.isEmpty(mySwaps)}" class="empty-card">
+      <p>You haven’t shared any swaps yet.<br>Start swapping your favorite dishes!</p>
+    </div>
+  </div>
+</section>
+
+<section id="requests" class="tab-content">
+  <div class="card-container">
+    <div class="dish-card" th:each="swap : ${mySwaps}" th:if="${swap.hasRequest}">
+      <div class="card-img">
+        <img th:if="${swap.imageUrl != null}" th:src="@{${swap.imageUrl}}" alt="Request Dish" />
+<!--        <img th:src="@{'/uploads/' + ${swap.imageUrl}}"-->
+<!--             th:alt="${swap.dishName}"-->
+<!--             onerror="this.src='https://via.placeholder.com/340x210?text=No+Image';" />-->
+
+      </div>
+      <div class="card-body">
+        <h2 th:text="${swap.dishName}">Dish Name</h2>
+        <p><strong>Category:</strong> <span th:text="${swap.category}"></span></p>
+        <p th:text="${swap.description}">Dish description</p>
+        <p><strong>Location:</strong> <span th:text="${swap.location}"></span></p>
+        <p><strong>Quantity:</strong> <span th:text="${swap.quantity}"></span></p>
+
+        <div style="margin-top:15px;">
+          <form th:action="@{/acceptSwap}" method="post" style="display:inline;">
+            <input type="hidden" name="id" th:value="${swap.id}">
+            <button type="submit" class="swap-btn">Accept Swap</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(mySwaps) or !#lists.contains(mySwaps.?[hasRequest], true)}" class="empty-card">
+      <p>No new swap requests yet.<br>They’ll appear here automatically!</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- 🔹 Edit Modal -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h2>Edit Swap</h2>
+    <form id="editForm" th:action="@{/updateSwap}" method="post">
+      <input type="hidden" id="swapId" name="id">
+      <label>Dish Name</label>
+      <input type="text" id="dishName" name="dishName" required>
+      <label>Category</label>
+      <input type="text" id="category" name="category" required>
+      <label>Description</label>
+      <textarea id="description" name="description"></textarea>
+      <label>Quantity</label>
+      <input type="text" id="quantity" name="quantity">
+      <label>Preferred Swap For</label>
+      <input type="text" id="swapFor" name="preferredSwapFor">
+      <label>Location</label>
+      <input type="text" id="location" name="location" required>
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 HomeBite Connect. Bringing Communities Together Through Food.</p>
+</footer>
+
+<script>
+  function showTab(tabName) {
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(sec => sec.classList.remove('active'));
+    document.querySelector(`.tab[onclick="showTab('${tabName}')"]`).classList.add('active');
+    document.getElementById(tabName).classList.add('active');
+  }
+
+  // 🔹 Modal functions
+  function openEditModal(btn) {
+    document.getElementById("editModal").style.display = "block";
+    document.getElementById("swapId").value = btn.dataset.id;
+    document.getElementById("dishName").value = btn.dataset.dish;
+    document.getElementById("category").value = btn.dataset.category;
+    document.getElementById("description").value = btn.dataset.description;
+    document.getElementById("quantity").value = btn.dataset.quantity;
+    document.getElementById("swapFor").value = btn.dataset.swapfor;
+    document.getElementById("location").value = btn.dataset.location;
+  }
+
+  function closeModal() {
+    document.getElementById("editModal").style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById("editModal");
+    if (event.target === modal) closeModal();
+  };
+
+   setInterval(() => {
+    if (document.getElementById('requests').classList.contains('active')) {
+      location.reload();
+    }
+  }, 60000);
+
+
+
+
+</script>
+</body>
+</html>
