@@ -7,32 +7,21 @@ Connect with local food lovers, share your homemade specialties, and explore the
 📖 Table of Contents
 
 Overview
-
 Features
-
 Technology Stack
-
 Installation and Setup
-
 Usage
-
 Screenshots
-
 Contributing
-
 License
-
 Future Enhancements
-
 Developed By
 
 🏠 Overview
-
 HomeBite Connect provides a platform for food enthusiasts to share homemade dishes, request swaps, and connect with their local neighborhood foodies.
 It fosters community bonding through the joy of sharing food and cultural flavors.
 
 ## ✨ Features
-
 | Feature | Description |
 |----------|--------------|
 | 👤 **User Authentication** | Secure registration and login with Spring Security |
@@ -44,7 +33,6 @@ It fosters community bonding through the joy of sharing food and cultural flavor
 | 🤝 **Community Driven** | Encourages local sharing and interaction |
 
 ## 💻 Technology Stack
-
 | Layer | Technologies |
 |-------|---------------|
 | **Backend** | Java, Spring Boot, Spring Security |
@@ -66,51 +54,37 @@ cd homebite-connect-backend
 Now, open your browser and visit 👉 http://localhost:8080
 
 🚀 Usage
-
 Once the app is running:
-
 Register a new user account
-
 Login with your credentials
-
 Share your dishes with photos and descriptions
-
 Browse other dishes and send swap requests
-
 Accept or reject incoming swap offers
-
 Manage your profile and shared dishes
-
 ## 🖼️ Screenshots
-
-### 🏡 Home Page  
+### 🏡 Home Page
+![Home Page](projectScaranshoots/front.png)
 ![Home Page](projectScaranshoots/homepage.png)
-
 ### 🍲 Dish Sharing Page  
 ![Dish Sharing Page](projectScaranshoots/share.png)
-
+![Dish Sharing Page](projectScaranshoots/shared.png)
 ### 👤 Profile Page  
 ![profile Page](projectScaranshoots/profile.png)
+### 👤 Order Page  
+![order Page](projectScaranshoots/order.png)
+### 👤 Payment Page  
+![Payment Page](projectScaranshoots/payment.png)
 📜 License
-
 This project is licensed under the MIT License.
 You’re free to use, modify, and distribute this project with proper credit.
 
 🌱 Future Enhancements
-
 💬 In-app chat between users
-
 📍 Location-based dish discovery
-
 ⭐ Dish rating & review system
-
 📱 Dedicated mobile app version
-
 🔔 Real-time notifications for swaps
-
 👨‍💻 Developed By
-
 Bharath Kumar
 🎯 Passionate about creating smart, community-driven platforms that connect people through technology.
-
 📧 [bharathkumarp0058@gmail.com] 
